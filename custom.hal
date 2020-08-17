@@ -1,0 +1,34 @@
+# Include your custom HAL commands here
+# This file will not be overwritten when you run PNCconf again
+
+loadrt toggle count=2
+addf toggle.0 servo-thread
+addf toggle.1 servo-thread
+
+
+loadrt or2 count=3
+addf or2.0 servo-thread 
+addf or2.1 servo-thread
+addf or2.2 servo-thread
+
+#STOPS
+net stops-in toggle.0.in <= hm2_7i92.0.7i76.0.0.input-16
+net stops-out toggle.0.out => hm2_7i92.0.7i76.0.0.output-08
+
+#DUST COLLECTOR SHOE
+net Brush-in toggle.1.in <= hm2_7i92.0.7i76.0.0.input-17
+
+#net brush_housing_up-A hm2_7i92.0.7i76.0.0.input-17 or2.1.in0
+net brush_housing_up-A toggle.1.out or2.1.in0
+net brush_housing_up-B motion.digital-out-02 or2.1.in1
+net brush_housing_up or2.1.out hm2_7i92.0.7i76.0.0.output-09
+
+#TOOL RELEASE
+net tool-release-A hm2_7i92.0.7i76.0.0.input-08 or2.0.in0 
+net tool-release-B motion.digital-out-01 or2.0.in1 
+net tool-release or2.0.out => hm2_7i92.0.7i76.0.0.output-10
+
+
+
+net spindle_has_tool hm2_7i92.0.7i76.0.0.input-09 motion.digital-in-01
+net spindle_tool_actuator_released hm2_7i92.0.7i76.0.0.input-10 motion.digital-in-03
